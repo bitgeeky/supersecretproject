@@ -6,6 +6,12 @@ require './key_manager.rb'
 
 class KeyServerEndPoints < Sinatra::Base
   key_manager = KeyManager.new
+  Thread.new do
+      while true do
+	  sleep 1
+	  key_manager.cron_job
+      end
+  end
   get '/' do
     "Hello, world!"
   end

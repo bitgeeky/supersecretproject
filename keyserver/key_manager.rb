@@ -1,8 +1,8 @@
 class KeyManager
     def initialize
 	@max_num_of_keys = 20
-	@expire_after = 300 # automatically expire after
-	@release_after = 60 # release if blocked 
+	@expire_after = 10 # automatically expire after
+	@release_after = 5 # release if blocked 
 	@key_pool = { }
 	@assigned_keys = { }
     end
@@ -44,5 +44,21 @@ class KeyManager
 	    last_update: Time.now.to_i,
 	}
 	key
+    end
+    def cron_job
+	puts "key rotation working fine"
+	@key_pool.each do |key, val|
+	    if Time.now.to_i - @key_pool[key][:last_update] >= @expire_after
+		@key_pool.delete(key)
+	    end
+	end
+	@assigned_keys.each do |key, val|
+	    if Time.now.to_i - @assigned_keys[key][:assigned_at] >= @release_after
+		@assigned_keys.delete(key)
+		@key_pool[key] = {
+		    last_update: Time.now.to_i,
+		}
+	    end
+	end
     end
 end
