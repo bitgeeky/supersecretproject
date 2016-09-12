@@ -6,7 +6,6 @@ class Rover
 	@movement_vector = [{'x'=>0,'y'=>1}, {'x'=>1, 'y'=>0}, {'x'=>0, 'y'=>-1}, {'x'=>-1, 'y'=>0}]
 	@current_direction_index = @direction_vector.index(direction)
     end
-
     def move_rover(instruction)
 	if instruction == 'L'
 	    @current_direction_index -= 1
@@ -20,7 +19,7 @@ class Rover
 	end
     end
     def get_current_position
-	 return @current_x_coordinate, @current_y_coordinate, @current_direction, @direction_vector[@current_direction_index]
+	 return @current_x_coordinate, @current_y_coordinate, @direction_vector[@current_direction_index]
     end
 end
 
