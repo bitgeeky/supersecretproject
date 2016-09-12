@@ -1,8 +1,8 @@
 class KeyManager
     def initialize
 	@max_num_of_keys = 20
-	@expire_after = 10 # automatically expire after
-	@release_after = 5 # release if blocked 
+	@expire_after = 20 # automatically expire after
+	@release_after = 10 # release if blocked 
 	@key_pool = { }
 	@assigned_keys = { }
     end
@@ -40,9 +40,11 @@ class KeyManager
 	key
     end
     def keep_alive(key)
-	@assigned_keys[@random_key] = {
-	    last_update: Time.now.to_i,
-	}
+	if @key_pool.key?(key)
+	    @key_pool[key] = {
+		last_update: Time.now.to_i,
+	    }
+	end
 	key
     end
     def cron_job
