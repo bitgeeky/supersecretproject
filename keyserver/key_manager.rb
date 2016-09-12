@@ -14,9 +14,21 @@ class KeyManager
 	end
 	@key_pool
     end
+    def get_all
+	@key_pool
+    end
     def get_key
 	key = @key_pool.pop
 	@assigned_keys.push(key)
 	key
+    end
+    def delete_key(key)
+	@key_pool.delete(key)
+	@assigned_keys.delete(key)
+	key
+    end
+    def release_key(key)
+	@assigned_keys.delete(key)
+	@key_pool.push(key)
     end
 end
