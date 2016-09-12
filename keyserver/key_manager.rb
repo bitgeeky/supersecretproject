@@ -1,16 +1,18 @@
 class KeyManager
-    @time_to_live # keep key alive till
-    @release_within # release if blocked
     def initialize
-	@num_of_keys = 20
-	@key_pool = []
-	@assigned_keys = []
+	@max_num_of_keys = 20
+	@expire_after = 300 # automatically expire after
+	@release_after = 60 # release if blocked 
+	@key_pool = { }
+	@assigned_keys = { }
     end
     def generate_keys
-	while @key_pool.size < 20
+	while @key_pool.size < @max_num_of_keys
 	    # generate random key
 	    random_key = (0...8).map { (65 + rand(26)).chr }.join
-	    @key_pool.push(random_key)
+	    @key_pool[random_key] = {
+		last_update: Time.now.to_i,
+	    }
 	end
 	@key_pool
     end
@@ -18,8 +20,11 @@ class KeyManager
 	@key_pool
     end
     def get_key
-	key = @key_pool.pop
-	@assigned_keys.push(key)
+	key = @key_pool.keys.first
+	@key_pool.delete(key)
+	@assigned_keys[key] = {
+	    assigned_at: Time.now.to_i,
+	}
 	key
     end
     def delete_key(key)
@@ -29,6 +34,15 @@ class KeyManager
     end
     def release_key(key)
 	@assigned_keys.delete(key)
-	@key_pool.push(key)
+	@key_pool[key] = {
+	    last_update: Time.now.to_i,
+	}
+	key
+    end
+    def keep_alive(key)
+	@assigned_keys[@random_key] = {
+	    last_update: Time.now.to_i,
+	}
+	key
     end
 end
