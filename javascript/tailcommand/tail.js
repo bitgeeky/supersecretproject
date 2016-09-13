@@ -1,5 +1,5 @@
 var fs = require('fs');
-var filePath = './logs.txt';
+var filePath = process.argv[2];
 
 file = fs.readFileSync(filePath);
 process.stdout.write(file.toString('utf-8'));
