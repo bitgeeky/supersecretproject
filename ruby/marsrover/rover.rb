@@ -9,7 +9,7 @@ class Rover
 	    {'x'=>-1, 'y'=>0}]
 	@current_direction_index = @direction_vector.index(direction)
     end
-    def move_rover(instruction)
+    def move(instruction)
 	if instruction == 'L'
 	    @current_direction_index -= 1
 	    @current_direction_index %= 4
@@ -31,19 +31,4 @@ class Rover
 	 return @current_x_coordinate, @current_y_coordinate,\
 	     @direction_vector[@current_direction_index]
     end
-end
-
-grid_size = gets.chomp
-
-while true do
-    initial_position = gets
-    x, y, z = initial_position.split
-    rover = Rover.new(x, y, z, grid_size)
-    instructions = gets.chomp
-    instructions.split("").each do |inst|
-	unless rover.move_rover(inst)
-	    puts "Invalid Move"
-	end
-    end
-    print (rover.get_current_position).join(" "), "\n"
 end
