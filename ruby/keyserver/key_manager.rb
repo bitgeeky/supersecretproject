@@ -48,18 +48,21 @@ class KeyManager
 	key
     end
     def cron_job
-	puts "key rotation working fine"
-	@key_pool.each do |key, val|
-	    if Time.now.to_i - @key_pool[key][:last_update] >= @expire_after
-		@key_pool.delete(key)
+	while true do
+	    sleep 1
+	    puts "key rotation working fine"
+	    @key_pool.each do |key, val|
+		if Time.now.to_i - @key_pool[key][:last_update] >= @expire_after
+		    @key_pool.delete(key)
+		end
 	    end
-	end
-	@assigned_keys.each do |key, val|
-	    if Time.now.to_i - @assigned_keys[key][:assigned_at] >= @release_after
-		@assigned_keys.delete(key)
-		@key_pool[key] = {
-		    last_update: Time.now.to_i,
-		}
+	    @assigned_keys.each do |key, val|
+		if Time.now.to_i - @assigned_keys[key][:assigned_at] >= @release_after
+		    @assigned_keys.delete(key)
+		    @key_pool[key] = {
+			last_update: Time.now.to_i,
+		    }
+		end
 	    end
 	end
     end
