@@ -1,0 +1,1 @@
+Wordpress with Ansible deployed on Vagrant box
